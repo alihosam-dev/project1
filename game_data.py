@@ -26,7 +26,7 @@ class Location:
 
     Instance Attributes:
         - name: The name of the location
-        - id: The id that cooresponds to where the location is found in the map
+        - position: The position that cooresponds to where the location is found in the map
         - points: How many points the player recieves for going to that location
         - short_desc: The short description shown after the player visits the location more than one time
         - full_desc: The full description shown the the player when the first visit a location
@@ -34,21 +34,24 @@ class Location:
         - items: a list of items found stored in this location
 
     Representation Invariants:
-        - # TODO
+        - name != ''
+        - position == -1 or pos > 0
+        - points > 0
+        - short_desc != ''
+        - full_desc != ''
     """
 
     name: str
-    id: int
+    position: int
     points: int
     short_desc: str
     full_desc: str
     commands: list[str]
     items: list
+    visited: bool
 
-    def __init__(self) -> None:
+    def __init__(self, name: str, position: int, points: int, short_desc: str, full_desc: str) -> None:
         """Initialize a new location.
-
-        # TODO Add more details here about the initialization if needed
         """
 
         # NOTES:
@@ -66,8 +69,13 @@ class Location:
         #
         # The only thing you must NOT change is the name of this class: Location.
         # All locations in your game MUST be represented as an instance of this class.
-
-        # TODO: Complete this method
+        self.name = name
+        self.position = position
+        self.points = points
+        self.short_desc = short_desc
+        self.full_desc = full_desc
+        self.items = []
+        self.visited = False
 
     def available_actions(self):
         """
@@ -81,6 +89,12 @@ class Location:
         # function header (e.g. add in parameters, complete the type contract) as needed
 
         # TODO: Complete this method, if you'd like or remove/replace it if you're not using it
+
+    def visited(self, visit: bool):
+        """
+        Change the status of whether the location has been visited before
+        """
+        self.visited = visit
 
 
 class Item:
@@ -177,8 +191,6 @@ class Player:
         self.victory = status
 
 
-
-
 class World:
     """A text adventure game world storing all location, item and map data.
 
@@ -255,7 +267,6 @@ class World:
             location = self.map_location_dict[item_start]
             new_item = Item(item_name, item_start, item_target, item_target_points)
             location.items.append(new_item)
-
 
     # TODO: Add methods for loading location data and item data (see note above).
 
