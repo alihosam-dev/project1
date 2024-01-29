@@ -53,16 +53,6 @@ class Location:
         """Initialize a new location.
         """
 
-        # NOTES:
-        # Data that could be associated with each Location object:
-        # a position in the world map,
-        # a brief description,
-        # a long description,
-        # a list of available commands/directions to move,
-        # items that are available in the location,
-        # and whether the location has been visited before.
-        # Store these as you see fit, using appropriate data types.
-        #
         # This is just a suggested starter class for Location.
         # You may change/add parameters and the data available for each Location object as you see fit.
         #
@@ -154,10 +144,6 @@ class Player:
         Initializes a new Player at position (x, y).
         """
 
-        # NOTES:
-        # This is a suggested starter class for Player.
-        # You may change these parameters and the data available for the Player object as you see fit.
-
         self.x = x
         self.y = y
         self.inventory = []
@@ -200,6 +186,8 @@ class World:
 
     Instance Attributes:
         - map: a nested list representation of this world's map
+        - items: A list of all the items in the world
+        - locations: a list of all the locations in the world
         - map_location_dict: a dictionary that returns a location based on cooresponding map number
 
     Representation Invariants:
@@ -230,7 +218,7 @@ class World:
         # The map MUST be stored in a nested list as described in the load_map() function's docstring below
         self.map = self.load_map(map_data)
 
-        self.load_item(items_data)
+        self.items = self.load_item(items_data)
 
         # NOTE: You may choose how to store location and item data; create your own World methods to handle these
         # accordingly. The only requirements:
@@ -254,12 +242,13 @@ class World:
             map_so_far.append([int(num) for num in line.split()])
         return map_so_far
 
-    def load_item(self, items_data: TextIO) -> None:
+    def load_item(self, items_data: TextIO) -> list[Item]:
         """
         Creates new Item instances for each item in the item_data file. Item instances are stored in thier
         cooresponding locations.
         """
 
+        items = []
         for line in items_data:
             item_lst = line.split()
 
@@ -270,7 +259,9 @@ class World:
 
             location = self.map_location_dict[item_start]
             new_item = Item(item_name, item_start, item_target, item_target_points)
+            items.append(new_item)
             location.items.append(new_item)
+        return items
 
     # TODO: Add methods for loading location data and item data (see note above).
 
