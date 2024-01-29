@@ -24,5 +24,3 @@ LOCATION 3
 You are outside the Robarts library.
 You are outside the Robarts library on a crowded street. There is a smell of coffee in the air.
 END
-
-my balls
