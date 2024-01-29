@@ -89,7 +89,7 @@ class Location:
 
         # TODO: Complete this method, if you'd like or remove/replace it if you're not using it
 
-    def visited(self, visit: bool):
+    def visited(self, visit: bool) -> None:
         """
         Change the status of whether the location has been visited before
         """
@@ -111,16 +111,15 @@ class Item:
         - target > 0
     """
 
+    name: str
+    start_position: int
+    target_position: int
+    target_points: int
+
     def __init__(self, name: str, start: int, target: int, target_points: int) -> None:
         """Initialize a new item.
         """
 
-        # NOTES:
-        # This is just a suggested starter class for Item.
-        # You may change these parameters and the data available for each Item object as you see fit.
-        # (The current parameters correspond to the example in the handout).
-        # Consider every method in this Item class as a "suggested method".
-        #
         # The only thing you must NOT change is the name of this class: Item.
         # All item objects in your game MUST be represented as an instance of this class.
 
