@@ -41,7 +41,6 @@ class Location:
     """
 
     name: str
-    position: int
     points: int
     short_desc: str
     full_desc: str
@@ -49,7 +48,7 @@ class Location:
     items: list
     visited: bool
 
-    def __init__(self, name: str, position: int, points: int, short_desc: str, full_desc: str) -> None:
+    def __init__(self, name: str, points: int, short_desc: str, full_desc: str) -> None:
         """Initialize a new location.
         """
 
@@ -59,7 +58,6 @@ class Location:
         # The only thing you must NOT change is the name of this class: Location.
         # All locations in your game MUST be represented as an instance of this class.
         self.name = name
-        self.position = position
         self.points = points
         self.short_desc = short_desc
         self.full_desc = full_desc
@@ -79,11 +77,11 @@ class Location:
 
         # TODO: Complete this method, if you'd like or remove/replace it if you're not using it
 
-    def visited(self, visit: bool) -> None:
+    def visited(self) -> None:
         """
         Change the status of whether the location has been visited before
         """
-        self.visited = visit
+        self.visited = True
 
 
 class Item:
