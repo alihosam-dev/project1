@@ -36,7 +36,6 @@ class Location:
     Representation Invariants:
         - name != ''
         - position == -1 or pos > 0
-        - points > 0
         - short_desc != ''
         - full_desc != ''
     """
@@ -101,10 +100,15 @@ class Item:
     """An item in our text adventure game world.
 
     Instance Attributes:
-        - # TODO
+        - name : The name of the item
+        - start : The starting position of the item
+        - target : The position of the target location of the item
+        - target_points: The nummber of points the player receives for taking the item to the target
 
     Representation Invariants:
-        - # TODO
+        - name != ""
+        - start > 0
+        - target > 0
     """
 
     def __init__(self, name: str, start: int, target: int, target_points: int) -> None:
@@ -160,22 +164,17 @@ class Player:
         self.inventory = []
         self.victory = False
 
-    def move_horizontal(self, command: str) -> None:
+    def move(self, command: str) -> None:
         """
         Moves the player east or west
         """
-        if command == "Go east":
+        if command == "GO EAST":
             self.x += 1
-        else:
+        elif command == "GO WEST":
             self.x -= 1
-
-    def move_vertical(self, command: str) -> None:
-        """
-        Moves the player north or south
-        """
-        if command == 'Go south':
+        elif command == 'GO SOUTH':
             self.y += 1
-        else:
+        elif command == "GO NORTH":
             self.y -= 1
 
     def pick_up_item(self, item: Item) -> None:
@@ -183,6 +182,9 @@ class Player:
         Adds the item given to the player's inventory
         """
         self.inventory.append(item)
+
+    def drop_item(self, item: Item) -> None:
+        self.inventory.remove(item)
 
     def victory(self, status: bool) -> None:
         """
