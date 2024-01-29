@@ -129,11 +129,13 @@ class World:
 
     Instance Attributes:
         - map: a nested list representation of this world's map
-        - # TODO add more instance attributes as needed; do NOT remove the map attribute
+        - map_location_dict: a dictionary that returns a location based on cooresponding map number
 
     Representation Invariants:
         - # TODO
     """
+    map: list[list[int]]
+    map_location_dict: dict[int, Location]
 
     def __init__(self, map_data: TextIO, location_data: TextIO, items_data: TextIO) -> None:
         """
@@ -172,8 +174,15 @@ class World:
 
         Return this list representation of the map.
         """
+        map_so_far = []
+        for line in map_data:
+            map_so_far.append([int(num) for num in line.split()])
+        return map_so_far
 
-        # TODO: Complete this method as specified. Do not modify any of this function's specifications.
+    def load_item(self):
+        return None
+
+
 
     # TODO: Add methods for loading location data and item data (see note above).
 
@@ -184,4 +193,4 @@ class World:
          return None.)
         """
 
-        # TODO: Complete this method as specified. Do not modify any of this function's specifications.
+        return self.map_location_dict[self.map[y][x]]
