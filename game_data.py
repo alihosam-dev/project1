@@ -242,6 +242,29 @@ class World:
             map_so_far.append([int(num) for num in line.split()])
         return map_so_far
 
+    def load_location(self, location_data: TextIO):
+        """
+        Creates new Location intances from the locations in location_data. Updates the self.map_location_dict with
+        the cooresponding mapping of the position of the location to the location itself
+        """
+
+        while location_data.readline() != '':
+            first_line = location_data.readline().split()
+            name = first_line[0]
+            position = int(first_line[1])
+
+            points = int(location_data.readline().strip())
+            short_desc = location_data.readline().strip()
+            full_desc = ''
+            curr_line = location_data.readline().strip()
+            while curr_line != 'END':
+                full_desc += curr_line + ' '
+                curr_line = location_data.readline().strip()
+
+
+
+
+
     def load_item(self, items_data: TextIO) -> list[Item]:
         """
         Creates new Item instances for each item in the item_data file. Item instances are stored in thier

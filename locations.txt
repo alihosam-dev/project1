@@ -1,10 +1,11 @@
+#DO NOT REMOVE THIS LINE#
 LOCATION -1
 0
 That way is blocked.
 That way is blocked.
 END
 
-LOCATION 1
+LOCATION_MAME 1
 0
 You are on the first floor of the Robarts Library. There is an empty study room to the South, an exit from the library to the East.
 You are on the first floor of the Robarts Library. It's usually crowded at this time of the day, but today it's eerily quiet.
@@ -12,7 +13,7 @@ Only a few students are studying inside one of the study rooms. You better not d
 service desk, looking bored and sleepy. There is an empty study room to the South, an exit from the library to the East.
 END
 
-LOCATION 2
+LOCATION_NAME_2 2
 0
 This study room is completely empty.
 You are in an empty study room. And by empty, we mean, absolutely empty. All the tables and chairs have been taken out,
