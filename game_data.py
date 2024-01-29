@@ -183,6 +183,9 @@ class Player:
         self.inventory.append(item)
 
     def drop_item(self, item: Item) -> None:
+        """
+        Removes the item given from the player's inventory
+        """
         self.inventory.remove(item)
 
     def victory(self, status: bool) -> None:
