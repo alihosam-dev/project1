@@ -117,11 +117,20 @@ class Player:
     A Player in the text advanture game.
 
     Instance Attributes:
-        - # TODO
+        - x: The x coordinate of the player as an int, it increases as the player moves to the right
+        - y: The y coordinate of the player as an int, it increases as the player moves downwards
+        - inventory: A list that stores the items the player has obtained
+        - victory: A boolean that represents whether the player has won
 
     Representation Invariants:
-        - # TODO
+        - x >= 0
+        - y >= 0
     """
+
+    x: int
+    y: int
+    inventory: list[Item]
+    victory: bool
 
     def __init__(self, x: int, y: int) -> None:
         """
@@ -137,6 +146,38 @@ class Player:
         self.inventory = []
         self.victory = False
 
+    def move_horizontal(self, command: str) -> None:
+        """
+        Moves the player east or west
+        """
+        if command == "Go east":
+            self.x += 1
+        else:
+            self.x -= 1
+
+    def move_vertical(self, command: str) -> None:
+        """
+        Moves the player north or south
+        """
+        if command == 'Go south':
+            self.y += 1
+        else:
+            self.y -= 1
+
+    def pick_up_item(self, item: Item) -> None:
+        """
+        Adds the item given to the player's inventory
+        """
+        self.inventory.append(item)
+
+    def victory(self, status: bool) -> None:
+        """
+        Changes the player's victory attribute based on the boolean given
+        """
+        self.victory = status
+
+
+
 
 class World:
     """A text adventure game world storing all location, item and map data.
@@ -149,6 +190,8 @@ class World:
         - # TODO
     """
     map: list[list[int]]
+    items: list[Item]
+    locations: list[Location]
     map_location_dict: dict[int, Location]
 
     def __init__(self, map_data: TextIO, location_data: TextIO, items_data: TextIO) -> None:
@@ -212,8 +255,6 @@ class World:
             location = self.map_location_dict[item_start]
             new_item = Item(item_name, item_start, item_target, item_target_points)
             location.items.append(new_item)
-
-
 
 
     # TODO: Add methods for loading location data and item data (see note above).
