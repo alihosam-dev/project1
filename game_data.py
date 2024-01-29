@@ -25,11 +25,25 @@ class Location:
     """A location in our text adventure game world.
 
     Instance Attributes:
-        - # TODO
+        - name: The name of the location
+        - id: The id that cooresponds to where the location is found in the map
+        - points: How many points the player recieves for going to that location
+        - short_desc: The short description shown after the player visits the location more than one time
+        - full_desc: The full description shown the the player when the first visit a location
+        - commands: a list of available commands/directions
+        - items: a list of items found stored in this location
 
     Representation Invariants:
         - # TODO
     """
+
+    name: str
+    id: int
+    points: int
+    short_desc: str
+    full_desc: str
+    commands: list[str]
+    items: list
 
     def __init__(self) -> None:
         """Initialize a new location.
@@ -157,6 +171,8 @@ class World:
         # The map MUST be stored in a nested list as described in the load_map() function's docstring below
         self.map = self.load_map(map_data)
 
+        self.load_item(items_data)
+
         # NOTE: You may choose how to store location and item data; create your own World methods to handle these
         # accordingly. The only requirements:
         # 1. Make sure the Location class is used to represent each location.
@@ -179,8 +195,24 @@ class World:
             map_so_far.append([int(num) for num in line.split()])
         return map_so_far
 
-    def load_item(self):
-        return None
+    def load_item(self, items_data: TextIO) -> None:
+        """
+        Creates new Item instances for each item in the item_data file. Item instances are stored in thier
+        cooresponding locations.
+        """
+
+        for line in items_data:
+            item_lst = line.split()
+
+            item_name = item_lst[0].replace('_', ' ')
+            item_start = int(item_lst[1])
+            item_target = int(item_lst[2])
+            item_target_points = int(item_lst[3])
+
+            location = self.map_location_dict[item_start]
+            new_item = Item(item_name, item_start, item_target, item_target_points)
+            location.items.append(new_item)
+
 
 
 
