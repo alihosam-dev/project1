@@ -259,10 +259,6 @@ class World:
                 full_desc += curr_line + ' '
                 curr_line = location_data.readline().strip()
 
-
-
-
-
     def load_item(self, items_data: TextIO) -> list[Item]:
         """
         Creates new Item instances for each item in the item_data file. Item instances are stored in thier
