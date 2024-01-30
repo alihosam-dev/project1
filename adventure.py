@@ -25,13 +25,13 @@ from game_data import World, Item, Location, Player
 
 # Note: You may modify the code below as needed; the following starter template are just suggestions
 if __name__ == "__main__":
-    w = World(open("map.txt"), open("locations.txt"), open("items.txt"))
-    p = Player(0, 0)  # set starting location of player; you may change the x, y coordinates here as appropriate
+    world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
+    player = Player(0, 0)  # set starting location of player; you may change the x, y coordinates here as appropriate
 
     menu = ["look", "inventory", "score", "quit", "back"]
 
-    while not p.victory:
-        location = w.get_location(p.x, p.y)
+    while not player.victory:
+        location = world.get_location(player.x, player.y)
 
         # TODO: ENTER CODE HERE TO PRINT LOCATION DESCRIPTION
         # Depending on whether or not it's been visited before,
@@ -41,13 +41,53 @@ if __name__ == "__main__":
         print("[menu]")
         for action in location.available_actions():
             print(action)
-        choice = input("\nEnter action: ")
+        choice = input("\nEnter action: ").upper()
 
-        if choice == "[menu]":
+        if choice == "[MENU]":
             print("Menu Options: \n")
             for option in menu:
                 print(option)
             choice = input("\nChoose action: ")
+
+        # Choice Handler
+        if choice == 'GO NORTH':
+            if world.get_location(player.x, player.y - 1):
+                player.move(0, -1)
+                player.use_move()
+            else:
+                print("\nInvalid Command")
+        elif choice == 'GO EAST':
+            if world.get_location(player.x + 1, player.y):
+                player.move(1, 0)
+                player.use_move()
+            else:
+                print("\nInvalid Command")
+        elif choice == 'GO SOUTH':
+            if world.get_location(player.x, player.y + 1):
+                player.move(0, 1)
+                player.use_move()
+            else:
+                print("\nInvalid Command")
+        elif choice == 'GO WEST':
+            if world.get_location(player.x - 1, player.y):
+                player.move(-1, 0)
+                player.use_move()
+            else:
+                print("\nInvalid Command")
+        elif choice == 'LOOK':
+            print("do something")
+        elif choice == 'INVENTORY':
+            print("do something")
+        elif choice == 'SCORE':
+            print("do something")
+        elif choice == 'QUIT':
+            print("do something")
+        elif choice == 'BACK':
+            print("do something")
+            ...
+        else:
+            print("\nInvalid Command")
+
 
         # TODO: CALL A FUNCTION HERE TO HANDLE WHAT HAPPENS UPON THE PLAYER'S CHOICE
         #  REMEMBER: the location = w.get_location(p.x, p.y) at the top of this loop will update the location if
