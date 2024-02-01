@@ -147,6 +147,7 @@ class Player:
         self.inventory = []
         self.game_status = False
         self.score = 0
+        self.remaining_moves = 20  # Change for more moves
 
     def move(self, dx: int, dy: int) -> None:
         """
@@ -175,7 +176,7 @@ class Player:
         Removes the item given from the player's inventory
         """
         self.inventory.remove(item)
-        location.items.append(Item)
+        location.items.append(item)
         if item.target_position == location.position:
             self.score += item.target_points
             item.target_points = 0
@@ -220,11 +221,13 @@ class World:
 
         # You may ADD parameters/attributes/methods to this class as you see fit.
         # BUT DO NOT RENAME OR REMOVE ANY EXISTING METHODS/ATTRIBUTES IN THIS CLASS
+        self.map_location_dict = {}
 
         # The map MUST be stored in a nested list as described in the load_map() function's docstring below
         self.map = self.load_map(map_data)
         self.locations = self.load_location(location_data)
         self.items = self.load_item(items_data)
+
 
         # NOTE: You may choose how to store location and item data; create your own World methods to handle these
         # accordingly. The only requirements:
@@ -303,10 +306,9 @@ class World:
          return None.)
         """
 
-        location_in_bounds = (0 <= x <= len(self.map[0])) and (0 <= y <= len(self.map))
-        location_is_valid = self.map_location_dict[self.map[y][x]] != -1
+        location_in_bounds = (0 <= x < len(self.map[0])) and (0 <= y < len(self.map))
 
-        if location_in_bounds and location_is_valid:
+        if location_in_bounds and self.map[y][x] != -1:
             return self.map_location_dict[self.map[y][x]]
         else:
             return None
@@ -339,5 +341,6 @@ class World:
         go_str = go_str[2:]
         actions_list.append(f'Go [{go_str}]')
 
-        actions_list.extend(['Use/Drop/Pickup {item}', 'Search', 'Look', 'Score', 'Inventory', 'Save/Load' 'Quit'])
+        actions_list.extend(['Use/Drop/Pickup {item}', 'Search', 'Look', 'Score',
+                             'Inventory', 'Menu', 'Save', 'Quit', 'Load'])  # Must have even amount
         return actions_list

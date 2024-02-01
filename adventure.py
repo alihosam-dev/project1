@@ -27,20 +27,27 @@ from game_data import World, Item, Location, Player
 if __name__ == "__main__":
     world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
     player = Player(0, 0)  # set starting location of player; you may change the x, y coordinates here as appropriate
+    prev_location = None
 
     while not player.game_status:
         location = world.get_location(player.x, player.y)
 
-        if not location.visited:
-            print(location.full_desc)
-            location.visited_before()
-        else:
-            print(location.short_desc)
+        if location != prev_location:
+            if not location.visited:
+                print(location.full_desc)
+                location.visited_before()
+            else:
+                print(location.short_desc)
 
-        print("What to do? \n")
-        print("[menu]")
-        for action in world.available_actions(player):
-            print(action)
+            print("What to do? \n")
+            print("[Menu]")
+            menu_str = ''
+            actions = world.available_actions(player)
+            for i in range(len(actions)//2):
+                menu_str += '- {0:30}  - {1}\n'.format(actions[2 * i], actions[2 * i + 1])
+            print(menu_str, end='')
+
+        prev_location = location
         choice = input("\nEnter action: ").upper()
 
         # Choice Handler
@@ -49,48 +56,54 @@ if __name__ == "__main__":
                 player.move(0, -1)
                 player.use_move()
             else:
-                print("\nInvalid Command")
+                print("\nOut of bounds. Move a differnt direction.")
         elif choice == 'GO EAST':
             if world.get_location(player.x + 1, player.y):
                 player.move(1, 0)
                 player.use_move()
             else:
-                print("\nInvalid Command")
+                print("\nOut of bounds. Move a differnt direction.")
         elif choice == 'GO SOUTH':
             if world.get_location(player.x, player.y + 1):
                 player.move(0, 1)
                 player.use_move()
             else:
-                print("\nInvalid Command")
+                print("\nOut of bounds. Move a differnt direction.")
         elif choice == 'GO WEST':
             if world.get_location(player.x - 1, player.y):
                 player.move(-1, 0)
                 player.use_move()
             else:
-                print("\nInvalid Command")
+                print("\nOut of bounds. Move a differnt direction.")
         elif choice == 'LOOK':
             print(location.full_desc)
         elif choice == 'SEARCH':
+            found = False
             for item in location.items:
                 print(f'You found the item: {item.name}')
-        elif (len(choice.split(' ')) == 2) and (choice.split(' ')[0] == 'PICKUP'):
+                found = True
+            if not found:
+                print('Nothing was found.')
+        elif choice.split(' ')[0] == 'PICKUP':
             found = False
-            pickup_item = choice.split(' ')[1]
+            pickup_item = str.join(' ', choice.split(' ')[1:])
             for item in location.items:
                 if item.name.upper() == pickup_item:
                     found = True
                     player.pick_up_item(item, location)
+                    print(f"{item.name} was picked up.")
             if not found:
-                print("\nInvalid Command")
-        elif (len(choice.split(' ')) == 2) and (choice.split(' ')[0] == 'DROP'):
+                print("\nItem not found.")
+        elif choice.split(' ')[0] == 'DROP':
             found = False
-            drop_item = choice.split(' ')[1]
+            drop_item = str.join(' ', choice.split(' ')[1:])
             for item in player.inventory:
                 if item.name.upper() == drop_item:
                     found = True
                     player.drop_item(item, location)
+                    print(f"{item.name} was dropped.")
             if not found:
-                print("\nInvalid Command")
+                print("\nThat item is not in your inventory.")
         elif (len(choice.split(' ')) == 2) and (choice.split(' ')[0] == 'Use'):
             # Impliment this later
             ...
@@ -103,5 +116,12 @@ if __name__ == "__main__":
         elif choice == 'QUIT':
             player.victory(True)
             ...
+        elif choice == 'MENU':
+            print('[Menu]')
+            menu_str = ''
+            actions = world.available_actions(player)
+            for i in range(len(actions) // 2):
+                menu_str += '- {0:30}  - {1}\n'.format(actions[2 * i], actions[2 * i + 1])
+            print(menu_str, end='')
         else:
             print("\nInvalid Command")
