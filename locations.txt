@@ -120,6 +120,7 @@ Road 15
 0
 You are on a road.
 You are on a road.
+END
 
 Goldring_Centre 16
 10
@@ -127,6 +128,7 @@ You are now at Goldring Centre.
 You are now at Goldring Centre. The award-winning facility for all things athletisim! Used for academic learning,
 recreational workouts and activities, intramurals, and is even home to the Varsity Blues baskeetball and volleyball
 teams! You came here yesterday for a quick workout.
+END
 
 Exam_Centre 17
 10
