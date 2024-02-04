@@ -19,7 +19,8 @@ please consult our Course Syllabus.
 This file is Copyright (c) 2024 CSC111 Teaching Team
 """
 from typing import Optional, TextIO
-
+import random
+import time
 
 class Location:
     """A location in our text adventure game world.
@@ -73,6 +74,62 @@ class Location:
         Change the status of whether the location has been visited before
         """
         self.visited = True
+
+class PuzzleLocation(Location):
+    """
+    A Location object that contains an additonall puzzle method that can be played by the player in the game
+    """
+    def play_puzzle(self) -> int:
+        """
+        Allows the player to play a puzzle depending on the specific Location the player is currently at.
+        Returns and integer value for the number of points the player recieves for the result of playing the puzzle.
+        """
+        if self.position == 1:  # change
+            print('Your friend chet')
+            while True:
+                choice = input('Would you like to Begin or Exit: ').upper()
+                if choice == 'EXIT':
+                    return 0
+                elif choice != 'BEGIN':
+                    print('Invalid Choice')
+                else:
+                    score = 0
+                    start_time = time.clock()
+                    while time.clock() - start_time < 30:
+                        x1 = random.randint(0, 12)
+                        x2 = random.randint(0, 12)
+                        answer = int(input(f'What is {x1} x {x2}: '))
+                        if answer == x1 * x2:
+                            score += 1
+                    if score >= 10:
+                        print(f'You passed the test with {score} correct answers!')
+                        return score * 4
+                    else:
+                        print('You did not pass the test :(. You may retake the test.')
+
+        elif self.position == 2:  # change
+            print('Your friend Ali challenges you to a dance battle! Hit the right notes (D, F, J, K) to dance'
+                  'like a star! Warm up your legs!')
+            while True:
+                choice = input('Would you like to Begin or Exit: ').upper()
+                if choice == 'EXIT':
+                    return 0
+                elif choice != 'BEGIN':
+                    print('Invalid Choice')
+                else:
+                    score = 0
+                    start_time = time.clock()
+                    while time.clock() - start_time < 30:
+                        options = ['D', 'F', 'J', 'k']
+                        random_index = random.randint(0, 3)
+                        answer = input(f'Hit {options[random_index]}: ').upper()
+                        if answer == options[random_index]:
+                            score += 1
+                    if score >= 30:
+                        print(f'You passed the test with {score} correct hits!')
+                        return score
+                    else:
+                        print('You did not pass the test :(. You may retake the test.')
 
 
 class Item:
@@ -133,7 +190,7 @@ class Player:
     x: int
     y: int
     remaining_moves: int
-    inventory: list[Item | UsableItem]
+    inventory: list[Item]
     game_status: bool
     score: int
 
@@ -227,7 +284,6 @@ class World:
         self.map = self.load_map(map_data)
         self.locations = self.load_location(location_data)
         self.items = self.load_item(items_data)
-
 
         # NOTE: You may choose how to store location and item data; create your own World methods to handle these
         # accordingly. The only requirements:
