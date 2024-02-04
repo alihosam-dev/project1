@@ -94,6 +94,43 @@ END
 Mclennan_Physical_Laboratories 12
 5
 You are now at Mclennan Physical Laboratories.
-You are now at Mclennan Physical Laboratories. The space which invites the wider university in to meet the physics
-community and showcases science education in the best possible light. Multiple separate waiting and study spaces that
-line the corridors outside the teaching labs.
+You are now at Mclennan Physical Laboratories. The space which invites the university in to meet the physics community
+Multiple separate waiting and study spaces that line the corridors outside the teaching labs. Always a fun place
+to visit.
+END
+
+Bahen_Centre 13
+10
+You are now at Bahen Centre.
+You are now at Bahen Centre. Containing 50 laboratories (including the Dynamic Graphics Project), 10 lecture theatres
+13 tutorial rooms, 9 seminar rooms, and about 300 offices. It is home to the Emerging Communications Technology
+Institute the Bell University Laboratories and an Advanced Surface Coatings Laboratory. The quintesential spot
+for Computer Science students on Campus.
+END
+
+Walberg_Memorial_Building 14
+5
+You are now at the Walberg Memorial Building.
+You are now at teh Walberg Memorial Building. Primarily used by the Department of Chemical Engineering and the
+Department of Materials Science and Engineering, and includes most of the Chemical Engineering laboratories for
+undergraduate students. You usually walk by here on your way to tests or exams.
+END
+
+Road 15
+0
+You are on a road.
+You are on a road.
+
+Goldring_Centre 16
+10
+You are now at Goldring Centre.
+You are now at Goldring Centre. The award-winning facility for all things athletisim! Used for academic learning,
+recreational workouts and activities, intramurals, and is even home to the Varsity Blues baskeetball and volleyball
+teams! You came here yesterday for a quick workout.
+
+Exam_Centre 17
+10
+You are now at the Exam Centre.
+You are now at the Exam Centre. You made it, this is where your test is held! Make sure you have all the items you
+need from around campus before coming here to write the test.
+END
