@@ -5,23 +5,95 @@ That way is blocked.
 That way is blocked.
 END
 
-LOCATION_MAME 1
+START_LOCATION 1
 0
-You are on the first floor of the Robarts Library. There is an empty study room to the South, an exit from the library to the East.
-You are on the first floor of the Robarts Library. It's usually crowded at this time of the day, but today it's eerily quiet.
-Only a few students are studying inside one of the study rooms. You better not disturb them. A librarian stands near the
-service desk, looking bored and sleepy. There is an empty study room to the South, an exit from the library to the East.
+You are on the starting road.
+This is the starting road. You are in the center of campus. There are lots of bulidings around. You have an exam today
+and you studied in many places last night. Unfortunately, you've misplaced 3 crucial items you need for the exam. Your
+TCard, your pen and your cheatsheet. You need to go around campus and find them before it's time for the exam!
 END
 
-LOCATION_NAME_2 2
-0
-This study room is completely empty.
-You are in an empty study room. And by empty, we mean, absolutely empty. All the tables and chairs have been taken out,
-the whiteboards taken off the wall, not even the carpeting is left. Are they planning to do something else with this space?
+Sidney_Smith_Hall 2
+5
+You are at Sidney Smith Hall,
+You are at Sidney Smith Hall. This is a building with rooms for tutorials, lectures and even a study space lounge for
+Arts & Science students! The smell of coffee is very noticeable as there's a second cup on the main floor.
 END
 
-LOCATION 3
-0
-You are outside the Robarts library.
-You are outside the Robarts library on a crowded street. There is a smell of coffee in the air.
+New_College 3
+10
+You are now at New College
+You are at New College. Home to the D.G. Ivey Library, the Writing Centre,the William Doo Auditorium, student lounges
+and the Audrey Taylor Dining Hall. You remember coming to the lounge to study here yesterday. Maybe you accidentally
+left something here?
 END
+
+Queens_Park 4
+10
+You are now at Queens Park, an essential stop for its stately sandstone architecture and historic sights. At every turn,
+there are museums and buildings, which together tell the story of Toronto. You went on a walk here yesterday to take
+a break from studying.
+END
+
+Clara_Benson_Building 5
+5
+You are now at the Clara Benson Bulidng.
+You are now at the Clara Benson Bulidng. One of the main athletics focused buldings on campus. Hosting several
+facilites such as the Strength and Conditioning Centre, the Field House, the Benson and Lounge and computer rooms.
+It's always nice coming here.
+END
+
+Ramsay_Wright_Laboratores 6
+5
+You are now at Ramsay Wright Laboratories.
+You are now at Ramsay Wright Laboratories. Home to the University of Toronto’s biological science departments, teaching
+laboratories are bright, open, and airy, with flexible benching and support areas. You sometimes meet up with friends,
+often to go somewhere else though.
+END
+
+Robarts_Libaray 7
+10
+You are now at Robarts Library.
+You are now at Robarts Library. The John P. Robarts Research Library contains the largest single collection of the
+University of Toronto Libraries. Many departments and libraries are physically housed within the 14-storey complex.
+You definetly studied here last night. It could be useful looking for any of the things you have misplaced.
+END
+
+Rotman_Commerce_Building 8
+10
+You are now at the Rotman Commerce Building.
+You are now at the Rotman Commerce Building. The new multistorey bulidng has study rooms, social lounges, and even a
+café on the ground floor! You see your friend Tiana who's panicking, she lost her special Rotman Backpack! She says she
+had lectures on the south side of campus today and asks if you'vee een her backpack anywhere? Can you help her find it?
+END
+
+Victoria_College 9
+5
+You are now at Victoria College.
+You are now at Victoria College. One of the two colleges on the east side of campus. Victoria College is home to
+many lounges, residencies, lecture halls, including Northrop Frye Hall! You don't come to this side of campus often,
+but it sure is nice to hang out here when you get the chance.
+EMD
+
+St._Mike's_College 10
+5
+You are now at St. Mike's College.
+You are now at St. Mike's College. One of the two colleges on the east side of campus. It raws many visitors to its
+elegant quad and famous rock gardens green campus. It is home to St. Basil’s Church and the adjacent Odette Hall, the
+oldest buildings at the University of Toronto.
+END
+
+Earth_Sciences_Building 11
+10
+You are now at the Earth Sciences Building.
+You are now at the Earth Sciences Building. Housing research programs in botany, forestry, geography, geology and
+environmental studies. The Earth Sciences Library is usually a good spot to study. You might want to look around,
+you might've lost something here.
+END
+
+Mclennan_Physical_Laboratories 12
+5
+You are now at Mclennan Physical Laboratories.
+You are now at Mclennan Physical Laboratories. The space which invites the wider university in to meet the physics
+community and showcases science education in the best possible light. Multiple separate waiting and study spaces that
+line the corridors outside the teaching labs.
