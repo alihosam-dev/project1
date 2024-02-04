@@ -71,13 +71,20 @@ class Location:
 
     def visited_before(self) -> None:
         """
-        Change the status of whether the location has been visited before
+        Change the status of whether the location has been visited before.
+
+        >>> new_location = Location('New Location', 0, 'Short description', 'this is a longer description', -2)
+        >>> new_location.visited == False
+        True
+        >>> new_location.visited_before()
+        >>> False == new_location.visited
+        False
         """
         self.visited = True
 
 class PuzzleLocation(Location):
     """
-    A Location object that contains an additonall puzzle method that can be played by the player in the game
+    A Location object that contains an additonal puzzle method that can be played by the player in the game.
     """
     def play_puzzle(self) -> int:
         """
@@ -85,7 +92,8 @@ class PuzzleLocation(Location):
         Returns and integer value for the number of points the player recieves for the result of playing the puzzle.
         """
         if self.position == 1:  # change
-            print('Your friend chet')
+            print('Your friend Chet challenges you to a math contest. He\'s pretty confident that he can answer 10'
+                  'multiple choice questions correct in 30 seconds. Are you ready to try and beat him in a test?')
             while True:
                 choice = input('Would you like to Begin or Exit: ').upper()
                 if choice == 'EXIT':
@@ -209,6 +217,13 @@ class Player:
     def move(self, dx: int, dy: int) -> None:
         """
         Moves the player
+
+        >>> new_player = Player(2,2)
+        >>> (new_player.x, new_player.y)
+        (2, 2)
+        >>> new_player.move(1,0)
+        >>> (new_player.x, new_player.y)
+        (3, 2)
         """
 
         self.x += dx
@@ -217,6 +232,12 @@ class Player:
     def use_move(self):
         """
         Use one of the player's remaining moves
+
+        >>> new_player = Player(2,2)
+        >>> starting_moves = new_player.remaining_moves
+        >>> new_player.use_move()
+        >>> starting_moves == new_player.remaining_moves + 1
+        True
         """
 
         self.remaining_moves -= 1
@@ -224,6 +245,20 @@ class Player:
     def pick_up_item(self, item: Item, location: Location) -> None:
         """
         Adds the item given to the player's inventory
+
+        >>> new_player = Player(2,2)
+        >>> new_item = Item('New Item', 1, 2, 3)
+        >>> new_location = Location('New Location', 0, 'Short description', 'this is a longer description', -2)
+        >>> new_location.items.append(new_item)
+        >>> new_location.items == [new_item]
+        True
+        >>> new_player.inventory
+        []
+        >>> new_player.pick_up_item(new_item, new_location)
+        >>> new_player.inventory == [new_item]
+        True
+        >>> new_location.items == []
+        True
         """
         self.inventory.append(item)
         location.items.remove(item)
@@ -231,6 +266,20 @@ class Player:
     def drop_item(self, item: Item, location: Location) -> None:
         """
         Removes the item given from the player's inventory
+
+        >>> new_player = Player(2,2)
+        >>> new_item = Item('New Item', 1, 2, 3)
+        >>> new_player.inventory.append(new_item)
+        >>> new_location = Location('New Location', 0, 'Short description', 'this is a longer description', -2)
+        >>> new_location.items == []
+        True
+        >>> new_player.inventory == [new_item]
+        True
+        >>> new_player.drop_item(new_item, new_location)
+        >>> new_player.inventory == []
+        True
+        >>> new_location.items == [new_item]
+        True
         """
         self.inventory.remove(item)
         location.items.append(item)
@@ -241,6 +290,13 @@ class Player:
     def victory(self, status: bool) -> None:
         """
         Changes the player's victory attribute based on the boolean given
+
+        >>> new_player = Player(2,2)
+        >>> new_player.game_status
+        False
+        >>> new_player.victory(True)
+        >>> new_player.game_status
+        True
         """
         self.game_status = status
 
@@ -255,7 +311,9 @@ class World:
         - map_location_dict: a dictionary that returns a location based on cooresponding map number
 
     Representation Invariants:
-        - all()
+        - all({location.position >= -1 for location in locations})
+        - map_location_dict != {}
+        - map != []
     """
     map: list[list[int]]
     items: list[Item]
