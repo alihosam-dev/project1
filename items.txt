@@ -1,4 +1,3 @@
-name start target points
 T_-Card 3 17 20
 Pen 7 17 20
 Cheat_Sheet 16 20
