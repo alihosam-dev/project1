@@ -29,15 +29,17 @@ class Location:
         - position: The position that cooresponds to where the location is found in the map
         - points: How many points the player recieves for going to that location
         - short_desc: The short description shown after the player visits the location more than one time
-        - full_desc: The full description shown the the player when the first visit a location
+        - full_desc: The full description shown the player when the first visit a location
         - commands: a list of available commands/directions
         - items: a list of items found stored in this location
+        - the position id used to coorespond the location to the map
 
     Representation Invariants:
         - name != ''
-        - position == -1 or pos > 0
+        - (position == -1) or (position > 0)
         - short_desc != ''
         - full_desc != ''
+        - len(full_desc) >= len(short_desc)
     """
 
     name: str
@@ -47,8 +49,9 @@ class Location:
     commands: list[str]
     items: list
     visited: bool
+    position: int
 
-    def __init__(self, name: str, points: int, short_desc: str, full_desc: str) -> None:
+    def __init__(self, name: str, points: int, short_desc: str, full_desc: str, position: int) -> None:
         """Initialize a new location.
         """
 
@@ -63,21 +66,9 @@ class Location:
         self.full_desc = full_desc
         self.items = []
         self.visited = False
+        self.position = position
 
-    def available_actions(self):
-        """
-        Return the available actions in this location.
-        The actions should depend on the items available in the location
-        and the x,y position of this location on the world map.
-        """
-
-        # NOTE: This is just a suggested method
-        # i.e. You may remove/modify/rename this as you like, and complete the
-        # function header (e.g. add in parameters, complete the type contract) as needed
-
-        # TODO: Complete this method, if you'd like or remove/replace it if you're not using it
-
-    def visited(self) -> None:
+    def visited_before(self) -> None:
         """
         Change the status of whether the location has been visited before
         """
@@ -117,6 +108,10 @@ class Item:
         self.target_points = target_points
 
 
+class UsableItem(Item):
+    pass
+
+
 class Player:
     """
     A Player in the text advanture game.
@@ -124,18 +119,23 @@ class Player:
     Instance Attributes:
         - x: The x coordinate of the player as an int, it increases as the player moves to the right
         - y: The y coordinate of the player as an int, it increases as the player moves downwards
+        - remaining_moves: The number of remain move the player has before they lose the game
         - inventory: A list that stores the items the player has obtained
-        - victory: A boolean that represents whether the player has won
+        - game_status: A boolean that represents whether the player has won
+        - score: An integer that represents the current score of the player
 
     Representation Invariants:
         - x >= 0
         - y >= 0
+        - remaining_moves >= 0
     """
 
     x: int
     y: int
-    inventory: list[Item]
-    victory: bool
+    remaining_moves: int
+    inventory: list[Item | UsableItem]
+    game_status: bool
+    score: int
 
     def __init__(self, x: int, y: int) -> None:
         """
@@ -145,38 +145,47 @@ class Player:
         self.x = x
         self.y = y
         self.inventory = []
-        self.victory = False
+        self.game_status = False
+        self.score = 0
+        self.remaining_moves = 20  # Change for more moves
 
-    def move(self, command: str) -> None:
+    def move(self, dx: int, dy: int) -> None:
         """
-        Moves the player east or west
+        Moves the player
         """
-        if command == "GO EAST":
-            self.x += 1
-        elif command == "GO WEST":
-            self.x -= 1
-        elif command == 'GO SOUTH':
-            self.y += 1
-        elif command == "GO NORTH":
-            self.y -= 1
 
-    def pick_up_item(self, item: Item) -> None:
+        self.x += dx
+        self.y += dy
+
+    def use_move(self):
+        """
+        Use one of the player's remaining moves
+        """
+
+        self.remaining_moves -= 1
+
+    def pick_up_item(self, item: Item, location: Location) -> None:
         """
         Adds the item given to the player's inventory
         """
         self.inventory.append(item)
+        location.items.remove(item)
 
-    def drop_item(self, item: Item) -> None:
+    def drop_item(self, item: Item, location: Location) -> None:
         """
         Removes the item given from the player's inventory
         """
         self.inventory.remove(item)
+        location.items.append(item)
+        if item.target_position == location.position:
+            self.score += item.target_points
+            item.target_points = 0
 
     def victory(self, status: bool) -> None:
         """
         Changes the player's victory attribute based on the boolean given
         """
-        self.victory = status
+        self.game_status = status
 
 
 class World:
@@ -189,7 +198,7 @@ class World:
         - map_location_dict: a dictionary that returns a location based on cooresponding map number
 
     Representation Invariants:
-        - # TODO
+        - all()
     """
     map: list[list[int]]
     items: list[Item]
@@ -212,11 +221,13 @@ class World:
 
         # You may ADD parameters/attributes/methods to this class as you see fit.
         # BUT DO NOT RENAME OR REMOVE ANY EXISTING METHODS/ATTRIBUTES IN THIS CLASS
+        self.map_location_dict = {}
 
         # The map MUST be stored in a nested list as described in the load_map() function's docstring below
         self.map = self.load_map(map_data)
-
+        self.locations = self.load_location(location_data)
         self.items = self.load_item(items_data)
+
 
         # NOTE: You may choose how to store location and item data; create your own World methods to handle these
         # accordingly. The only requirements:
@@ -240,11 +251,13 @@ class World:
             map_so_far.append([int(num) for num in line.split()])
         return map_so_far
 
-    def load_location(self, location_data: TextIO):
+    def load_location(self, location_data: TextIO) -> list[Location]:
         """
         Creates new Location intances from the locations in location_data. Updates the self.map_location_dict with
         the cooresponding mapping of the position of the location to the location itself
         """
+
+        locations = []
 
         while location_data.readline() != '':
             first_line = location_data.readline().split()
@@ -258,6 +271,12 @@ class World:
             while curr_line != 'END':
                 full_desc += curr_line + ' '
                 curr_line = location_data.readline().strip()
+
+            new_location = Location(name, points, short_desc, full_desc, position)
+            locations.append(new_location)
+            self.map_location_dict[position] = new_location
+
+        return locations
 
     def load_item(self, items_data: TextIO) -> list[Item]:
         """
@@ -280,8 +299,6 @@ class World:
             location.items.append(new_item)
         return items
 
-    # TODO: Add methods for loading location data and item data (see note above).
-
     # NOTE: The method below is REQUIRED. Complete it exactly as specified.
     def get_location(self, x: int, y: int) -> Optional[Location]:
         """Return Location object associated with the coordinates (x, y) in the world map, if a valid location exists at
@@ -289,4 +306,41 @@ class World:
          return None.)
         """
 
-        return self.map_location_dict[self.map[y][x]]
+        location_in_bounds = (0 <= x < len(self.map[0])) and (0 <= y < len(self.map))
+
+        if location_in_bounds and self.map[y][x] != -1:
+            return self.map_location_dict[self.map[y][x]]
+        else:
+            return None
+
+    def available_actions(self, player: Player) -> list[str]:
+        """
+        Return the available actions in this location.
+        The actions should depend on the items available in the location
+        and the x,y position of this location on the world map.
+        """
+
+        # NOTE: This is just a suggested method
+        # i.e. You may remove/modify/rename this as you like, and complete the
+        # function header (e.g. add in parameters, complete the type contract) as needed
+
+        actions_list = []
+
+        go_list = []
+        if self.get_location(player.x, player.y - 1):
+            go_list.append('north')
+        if self.get_location(player.x + 1, player.y):
+            go_list.append('east')
+        if self.get_location(player.x, player.y + 1):
+            go_list.append('south')
+        if self.get_location(player.x - 1, player.y):
+            go_list.append('west')
+        go_str = ''
+        for direction in go_list:
+            go_str += ', ' + direction
+        go_str = go_str[2:]
+        actions_list.append(f'Go [{go_str}]')
+
+        actions_list.extend(['Use/Drop/Pickup {item}', 'Search', 'Look', 'Score',
+                             'Inventory', 'Menu', 'Save', 'Quit', 'Load'])  # Must have even amount
+        return actions_list

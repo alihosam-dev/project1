@@ -25,37 +25,103 @@ from game_data import World, Item, Location, Player
 
 # Note: You may modify the code below as needed; the following starter template are just suggestions
 if __name__ == "__main__":
-    w = World(open("map.txt"), open("locations.txt"), open("items.txt"))
-    p = Player(0, 0)  # set starting location of player; you may change the x, y coordinates here as appropriate
+    world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
+    player = Player(0, 0)  # set starting location of player; you may change the x, y coordinates here as appropriate
+    prev_location = None
 
-    menu = ["look", "inventory", "score", "quit", "back"]
+    while not player.game_status:
+        location = world.get_location(player.x, player.y)
 
-    while not p.victory:
-        location = w.get_location(p.x, p.y)
+        if location != prev_location:
+            if not location.visited:
+                print(location.full_desc)
+                location.visited_before()
+            else:
+                print(location.short_desc)
 
-        # TODO: ENTER CODE HERE TO PRINT LOCATION DESCRIPTION
-        # Depending on whether or not it's been visited before,
-        # print either full description (first time visit) or brief description (every subsequent visit)
+            print("What to do? \n")
+            print("[Menu]")
+            menu_str = ''
+            actions = world.available_actions(player)
+            for i in range(len(actions)//2):
+                menu_str += '- {0:30}  - {1}\n'.format(actions[2 * i], actions[2 * i + 1])
+            print(menu_str, end='')
 
-        print("What to do? \n")
-        print("[menu]")
-        for action in location.available_actions():
-            print(action)
-        choice = input("\nEnter action: ")
+        prev_location = location
+        choice = input("\nEnter action: ").upper()
 
-        if choice == "[menu]":
-            print("Menu Options: \n")
-            for option in menu:
-                print(option)
-            choice = input("\nChoose action: ")
-
-        # TODO: CALL A FUNCTION HERE TO HANDLE WHAT HAPPENS UPON THE PLAYER'S CHOICE
-        #  REMEMBER: the location = w.get_location(p.x, p.y) at the top of this loop will update the location if
-        #  the choice the player made was just a movement, so only updating player's position is enough to change the
-        #  location to the next appropriate location
-        #  Possibilities:
-        #  A helper function such as do_action(w, p, location, choice)
-        #  OR A method in World class w.do_action(p, location, choice)
-        #  OR Check what type of action it is, then modify only player or location accordingly
-        #  OR Method in Player class for move or updating inventory
-        #  OR Method in Location class for updating location item info, or other location data etc....
+        # Choice Handler
+        if choice == 'GO NORTH':
+            if world.get_location(player.x, player.y - 1):
+                player.move(0, -1)
+                player.use_move()
+            else:
+                print("\nOut of bounds. Move a differnt direction.")
+        elif choice == 'GO EAST':
+            if world.get_location(player.x + 1, player.y):
+                player.move(1, 0)
+                player.use_move()
+            else:
+                print("\nOut of bounds. Move a differnt direction.")
+        elif choice == 'GO SOUTH':
+            if world.get_location(player.x, player.y + 1):
+                player.move(0, 1)
+                player.use_move()
+            else:
+                print("\nOut of bounds. Move a differnt direction.")
+        elif choice == 'GO WEST':
+            if world.get_location(player.x - 1, player.y):
+                player.move(-1, 0)
+                player.use_move()
+            else:
+                print("\nOut of bounds. Move a differnt direction.")
+        elif choice == 'LOOK':
+            print(location.full_desc)
+        elif choice == 'SEARCH':
+            found = False
+            for item in location.items:
+                print(f'You found the item: {item.name}')
+                found = True
+            if not found:
+                print('Nothing was found.')
+        elif choice.split(' ')[0] == 'PICKUP':
+            found = False
+            pickup_item = str.join(' ', choice.split(' ')[1:])
+            for item in location.items:
+                if item.name.upper() == pickup_item:
+                    found = True
+                    player.pick_up_item(item, location)
+                    print(f"{item.name} was picked up.")
+            if not found:
+                print("\nItem not found.")
+        elif choice.split(' ')[0] == 'DROP':
+            found = False
+            drop_item = str.join(' ', choice.split(' ')[1:])
+            for item in player.inventory:
+                if item.name.upper() == drop_item:
+                    found = True
+                    player.drop_item(item, location)
+                    print(f"{item.name} was dropped.")
+            if not found:
+                print("\nThat item is not in your inventory.")
+        elif (len(choice.split(' ')) == 2) and (choice.split(' ')[0] == 'Use'):
+            # Impliment this later
+            ...
+        elif choice == 'INVENTORY':
+            print("[inventory]")
+            for item in player.inventory:
+                print(f'- {item.name}')
+        elif choice == 'SCORE':
+            print(player.score)
+        elif choice == 'QUIT':
+            player.victory(True)
+            ...
+        elif choice == 'MENU':
+            print('[Menu]')
+            menu_str = ''
+            actions = world.available_actions(player)
+            for i in range(len(actions) // 2):
+                menu_str += '- {0:30}  - {1}\n'.format(actions[2 * i], actions[2 * i + 1])
+            print(menu_str, end='')
+        else:
+            print("\nInvalid Command")
