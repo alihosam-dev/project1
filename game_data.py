@@ -147,7 +147,7 @@ class PuzzleLocation(Location):
         Returns and integer value for the number of points the player recieves for the result of playing the puzzle.
         """
         if self.position == 4:  # change
-            print("Chet just got done with math lecture here and he's feeling pretty confident! He bets"
+            print("Chet just got done with math lecture here and he's feeling pretty confident! He bets "
                   "he can answer more multiplication questions in 30 seconds than you! Wanna play?")
             while True:
                 choice = input('Would you like to Begin or Exit: ').upper()

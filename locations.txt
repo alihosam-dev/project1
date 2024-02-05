@@ -79,7 +79,7 @@ END
 Walberg_Memorial_Building 14
 5
 You are now at the Walberg Memorial Building.
-You are now at teh Walberg Memorial Building. Primarily used by the Department of Chemical Engineering and the
+You are now at the Walberg Memorial Building. Primarily used by the Department of Chemical Engineering and the
 Department of Materials Science and Engineering, and includes most of the Chemical Engineering laboratories for
 undergraduate students. You usually walk by here on your way to tests or exams.
 END

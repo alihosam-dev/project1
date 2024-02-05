@@ -1,0 +1,22 @@
+go north
+go west
+pickup t-card
+go east
+go north
+go north
+use t-card
+pickup lucky exam pen
+go north
+go east
+pickup cheat sheet
+go west
+go south
+go south
+go south
+go south
+go south
+go south
+go south
+drop t-card
+drop lucky exam pen
+drop cheat sheet
