@@ -86,17 +86,69 @@ class Location:
 
 class PuzzleLocation(Location):
     """
-    A Location object that contains an additonal puzzle method that can be played by the player in the game.
-    """
+    A Location object that contains an additonal attribute and a puzzle method that can be played by the player
+    in the game
+
+        Instance Attributes:
+            - name: The name of the location
+            - position: The position that cooresponds to where the location is found in the map
+            - points: How many points the player recieves for going to that location
+            - short_desc: The short description shown after the player visits the location more than one time
+            - full_desc: The full description shown the player when the first visit a location
+            - commands: a list of available commands/directions
+            - items: a list of items found stored in this location
+            - position: the position id used to coorespond the location to the map
+            - access : boolean for whether player has access to the location
+            - game_won: integer representing if the player has won the game at the puzzle location
+
+        Representation Invariants:
+            - name != ''
+            - (position == -1) or (position > 0)
+            - short_desc != ''
+            - full_desc != ''
+            - len(full_desc) >= len(short_desc)
+            - game_won == 0 or game_won == 1
+        """
+
+    name: str
+    points: int
+    short_desc: str
+    full_desc: str
+    commands: list[str]
+    items: list
+    visited: bool
+    position: int
+    access: bool
+    game_won: int
+
+    def __init__(self, name: str, points: int, short_desc: str, full_desc: str, position: int) -> None:
+        """Initialize a new location.
+        """
+
+        # This is just a suggested starter class for Location.
+        # You may change/add parameters and the data available for each Location object as you see fit.
+        #
+        # The only thing you must NOT change is the name of this class: Location.
+        # All locations in your game MUST be represented as an instance of this class.
+        super().__init__(name, points, short_desc, full_desc, position)
+        self.name = name
+        self.points = points
+        self.short_desc = short_desc
+        self.full_desc = full_desc
+        self.items = []
+        self.visited = False
+        self.position = position
+        self.access = False
+        self.game_won = 1
 
     def play_puzzle(self) -> int:
         """
         Allows the player to play a puzzle depending on the specific Location the player is currently at.
         Returns and integer value for the number of points the player recieves for the result of playing the puzzle.
         """
-        if self.position == 1:  # change
-            print('Your friend Chet challenges you to a math contest. He\'s pretty confident that he can answer 10'
-                  'multiple choice questions correct in 30 seconds. Are you ready to try and beat him in a test?')
+        if self.position == 4:  # change
+            print("Chet just got done with math lecture here and he's feeling pretty confident! He bets"
+                  "he can answer more multiplication questions in 30 seconds than you! Wanna play?")
             while True:
                 choice = input('Would you like to Begin or Exit: ').upper()
                 if choice == 'EXIT':
@@ -105,8 +157,8 @@ class PuzzleLocation(Location):
                     print('Invalid Choice')
                 else:
                     score = 0
-                    start_time = time.clock()
-                    while time.clock() - start_time < 30:
+                    start_time = time.time()
+                    while time.time() - start_time < 30:
                         x1 = random.randint(0, 12)
                         x2 = random.randint(0, 12)
                         answer = int(input(f'What is {x1} x {x2}: '))
@@ -114,12 +166,14 @@ class PuzzleLocation(Location):
                             score += 1
                     if score >= 10:
                         print(f'You passed the test with {score} correct answers!')
-                        return score * 4
+                        prize = score * 4 * self.game_won
+                        self.game_won = 0
+                        return prize
                     else:
                         print('You did not pass the test :(. You may retake the test.')
 
-        elif self.position == 2:  # change
-            print('Your friend Ali challenges you to a dance battle! Hit the right notes (D, F, J, K) to dance'
+        elif self.position == 13:  # change
+            print('Ali challenges you to a dance battle! Hit the right notes (D, F, J, K) to dance'
                   'like a star! Warm up your legs!')
             while True:
                 choice = input('Would you like to Begin or Exit: ').upper()
@@ -129,18 +183,26 @@ class PuzzleLocation(Location):
                     print('Invalid Choice')
                 else:
                     score = 0
-                    start_time = time.clock()
-                    while time.clock() - start_time < 30:
-                        options = ['D', 'F', 'J', 'k']
+                    start_time = time.time()
+                    while time.time() - start_time < 30:
+                        options = ['D', 'F', 'J', 'K']
                         random_index = random.randint(0, 3)
                         answer = input(f'Hit {options[random_index]}: ').upper()
                         if answer == options[random_index]:
                             score += 1
-                    if score >= 30:
+                    if score >= 22:
                         print(f'You passed the test with {score} correct hits!')
-                        return score
+                        prize = score * self.game_won
+                        self.game_won = 0
+                        return prize
                     else:
                         print('You did not pass the test :(. You may retake the test.')
+
+    def grant_access(self):
+        """
+        Changes the status of whether the player has access to the location
+        """
+        self.access = True
 
 
 class Item:
@@ -177,7 +239,36 @@ class Item:
 
 
 class UsableItem(Item):
-    pass
+    """A usable item in our text adventure game world. Inherits Item class
+
+        Instance Attributes:
+            - name : The name of the item
+            - start : The starting position of the item
+            - target : The position of the target location of the item
+            - use_locations: List of position of locations where the item can be used
+            - target_points: The nummber of points the player receives for taking the item to the target
+
+        Representation Invariants:
+            - name != ""
+            - start > 0
+            - target > 0
+        """
+
+    name: str
+    start_position: int
+    target_position: int
+    target_points: int
+    use_locations: list[int]
+
+    def __init__(self, name: str, start: int, target: int, target_points: int, use_locations: list[int]) -> None:
+        """Initialize a new usable item.
+        """
+        Item.__init__(self, name, start, target, target_points)
+        self.name = name
+        self.start_position = start
+        self.target_position = target
+        self.target_points = target_points
+        self.use_locations = use_locations
 
 
 class Player:
@@ -201,7 +292,7 @@ class Player:
     x: int
     y: int
     remaining_moves: int
-    inventory: list[Item]
+    inventory: list[Item | UsableItem]
     game_status: bool
     score: int
 
@@ -215,7 +306,7 @@ class Player:
         self.inventory = []
         self.game_status = False
         self.score = 0
-        self.remaining_moves = 20  # Change for more moves
+        self.remaining_moves = 40  # Change for more moves
 
     def move(self, dx: int, dy: int) -> None:
         """
@@ -245,7 +336,7 @@ class Player:
 
         self.remaining_moves -= 1
 
-    def pick_up_item(self, item: Item, location: Location) -> None:
+    def pick_up_item(self, item: Item | UsableItem, location: Location) -> None:
         """
         Adds the item given to the player's inventory
 
@@ -264,6 +355,9 @@ class Player:
         True
         """
         self.inventory.append(item)
+        if item.name == 'Laptop':
+            print("You found your laptop! You left this here yesterday in the panic of realizing you have to go to "
+                  "bed! You might wanna take this with you to the exam centre.")
         location.items.remove(item)
 
     def drop_item(self, item: Item, location: Location) -> None:
@@ -287,8 +381,18 @@ class Player:
         self.inventory.remove(item)
         location.items.append(item)
         if item.target_position == location.position:
+            if item.name == 'Rotman Backpack':
+                print("Tiana: You found it! Thank you so much, I don't know how to thank you, this backpack is almost"
+                      "my entire personality.")
             self.score += item.target_points
             item.target_points = 0
+
+    def use_item(self, item: UsableItem, location: PuzzleLocation):
+        """
+        Uses the item at the given location, item stays in player inventory
+        """
+        if location.position in item.use_locations:
+            location.grant_access()
 
     def victory(self, status: bool) -> None:
         """
@@ -319,11 +423,13 @@ class World:
         - map != []
     """
     map: list[list[int]]
-    items: list[Item]
-    locations: list[Location]
+    items: list[Item | UsableItem]
+    locations: list[Location | PuzzleLocation]
+    puzzle_locations: list[PuzzleLocation]
     map_location_dict: dict[int, Location]
 
-    def __init__(self, map_data: TextIO, location_data: TextIO, items_data: TextIO) -> None:
+    def __init__(self, map_data: TextIO, location_data: TextIO, items_data: TextIO, usable_items_data: TextIO,
+                 puzzle_locations_data: TextIO) -> None:
         """
         Initialize a new World for a text adventure game, based on the data in the given open files.
 
@@ -343,8 +449,8 @@ class World:
 
         # The map MUST be stored in a nested list as described in the load_map() function's docstring below
         self.map = self.load_map(map_data)
-        self.locations = self.load_location(location_data)
-        self.items = self.load_item(items_data)
+        self.locations = self.load_location(location_data, puzzle_locations_data)
+        self.items = self.load_item(items_data, usable_items_data)
 
         # NOTE: You may choose how to store location and item data; create your own World methods to handle these
         # accordingly. The only requirements:
@@ -368,7 +474,7 @@ class World:
             map_so_far.append([int(num) for num in line.split()])
         return map_so_far
 
-    def load_location(self, location_data: TextIO) -> list[Location]:
+    def load_location(self, location_data: TextIO, puzzle_locations_data: TextIO) -> list[Location]:
         """
         Creates new Location intances from the locations in location_data. Updates the self.map_location_dict with
         the cooresponding mapping of the position of the location to the location itself
@@ -393,9 +499,26 @@ class World:
             locations.append(new_location)
             self.map_location_dict[position] = new_location
 
+        while puzzle_locations_data.readline() != '':
+            first_line = puzzle_locations_data.readline().split()
+            name = first_line[0]
+            position = int(first_line[1])
+
+            points = int(puzzle_locations_data.readline().strip())
+            short_desc = puzzle_locations_data.readline().strip()
+            full_desc = ''
+            curr_line = puzzle_locations_data.readline().strip()
+            while curr_line != 'END':
+                full_desc += curr_line + ' '
+                curr_line = puzzle_locations_data.readline().strip()
+
+            new_location = PuzzleLocation(name, points, short_desc, full_desc, position)
+            locations.append(new_location)
+            self.map_location_dict[position] = new_location
+
         return locations
 
-    def load_item(self, items_data: TextIO) -> list[Item]:
+    def load_item(self, items_data: TextIO, usable_items_data: TextIO) -> list[Item]:
         """
         Creates new Item instances for each item in the item_data file. Item instances are stored in thier
         cooresponding locations.
@@ -414,10 +537,22 @@ class World:
             new_item = Item(item_name, item_start, item_target, item_target_points)
             items.append(new_item)
             location.items.append(new_item)
+        usable_line_1 = usable_items_data.readline()
+        item_lst = usable_line_1.split()
+        item_name = item_lst[0].replace('_', ' ')
+        item_start = int(item_lst[1])
+        item_target = int(item_lst[2])
+        item_target_points = int(item_lst[3])
+        location = self.map_location_dict[item_start]
+        usable_line_2 = usable_items_data.readline()
+        use_locations = [int(item) for item in usable_line_2.split()]
+        new_item = UsableItem(item_name, item_start, item_target, item_target_points, use_locations)
+        items.append(new_item)
+        location.items.append(new_item)
         return items
 
     # NOTE: The method below is REQUIRED. Complete it exactly as specified.
-    def get_location(self, x: int, y: int) -> Optional[Location | PuzzleLocation]:
+    def get_location(self, x: int, y: int) -> Optional[Location] | Optional[PuzzleLocation]:
         """Return Location object associated with the coordinates (x, y) in the world map, if a valid location exists at
          that position. Otherwise, return None. (Remember, locations represented by the number -1 on the map should
          return None.)
@@ -437,6 +572,10 @@ class World:
         and the x,y position of this location on the world map.
         """
 
+        # NOTE: This is just a suggested method
+        # i.e. You may remove/modify/rename this as you like, and complete the
+        # function header (e.g. add in parameters, complete the type contract) as needed
+
         actions_list = []
 
         go_list = []
@@ -452,13 +591,17 @@ class World:
         for direction in go_list:
             go_str += ', ' + direction
         go_str = go_str[2:]
-        actions_list.append(f'Go [{go_str}]')
+        actions_list.append(f'- Go [{go_str}]')
 
-        if (self.get_location(player.x, player.y) is PuzzleLocation
+        if (type(self.get_location(player.x, player.y)) is PuzzleLocation
                 and (self.get_location(player.x, player.y).position == 4 or
                      self.get_location(player.x, player.y).position == 13)):
-            actions_list.append('Talk')
+            actions_list.append('- Talk')
 
-        actions_list.extend(['Use/Drop/Pickup {item}', 'Search', 'Look', 'Score',
-                             'Inventory', 'Menu', 'Quit'])
+        actions_list.extend(['- Use/Drop/Pickup {item}', '- Search', '- Look', '- Score',
+                             '- Inventory', '- Menu', '- Quit'])
+
+        if len(actions_list) % 2 != 0:
+            actions_list.append('')
+
         return actions_list

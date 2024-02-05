@@ -25,8 +25,9 @@ from game_data import PuzzleLocation, World, Item, Location, Player
 
 # Note: You may modify the code below as needed; the following starter template are just suggestions
 if __name__ == "__main__":
-    world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
-    player = Player(0, 0)  # set starting location of player; you may change the x, y coordinates here as appropriate
+    world = World(open("map.txt"), open("locations.txt"), open("items.txt"), open("usable_items.txt"),
+                  open("puzzle_locations.txt"))
+    player = Player(2, 4)  # set starting location of player; you may change the x, y coordinates here as appropriate
     prev_location = None
 
     # Create a list of required items for win codition
@@ -38,18 +39,21 @@ if __name__ == "__main__":
         location = world.get_location(player.x, player.y)
 
         if location != prev_location:
-            if not location.visited:
-                print(location.full_desc)
-                location.visited_before()
+            if type(location) is PuzzleLocation and not location.access and location.position != 4:
+                print("You don't have access to this building. You need to use a T-Card")
             else:
-                print(location.short_desc)
+                if not location.visited:
+                    print(location.full_desc)
+                    location.visited_before()
+                else:
+                    print(location.short_desc)
 
             print("What to do? \n")
             print("[Menu]")
             menu_str = ''
             actions = world.available_actions(player)
             for i in range(len(actions) // 2):
-                menu_str += '{0:30}  1}\n'.format(actions[2 * i], actions[2 * i + 1])
+                menu_str += '{0:30}  {1}\n'.format(actions[2 * i], actions[2 * i + 1])
             print(menu_str, end='')
 
         prev_location = location
@@ -83,35 +87,53 @@ if __name__ == "__main__":
         elif choice == 'LOOK':
             print(location.full_desc)
         elif choice == 'SEARCH':
-            found = False
-            for item in location.items:
-                print(f'You found the item: {item.name}')
-                found = True
-            if not found:
-                print('Nothing was found.')
+            if type(location) is PuzzleLocation and not location.access and location.position != 4:
+                print("You don't have access to this building. You need to use a T-Card")
+            else:
+                found = False
+                for item in location.items:
+                    print(f'You found the item: {item.name}')
+                    found = True
+                if not found:
+                    print('Nothing was found.')
         elif choice.split(' ')[0] == 'PICKUP':
-            found = False
-            pickup_item = str.join(' ', choice.split(' ')[1:])
-            for item in location.items:
-                if item.name.upper() == pickup_item:
-                    found = True
-                    player.pick_up_item(item, location)
-                    print(f"{item.name} was picked up.")
-            if not found:
-                print("\nItem not found.")
+            if type(location) is PuzzleLocation and not location.access and location.position != 4:
+                print("You don't have access to this building. You need to use a T-Card")
+            else:
+                found = False
+                pickup_item = str.join(' ', choice.split(' ')[1:])
+                for item in location.items:
+                    if item.name.upper() == pickup_item:
+                        found = True
+                        player.pick_up_item(item, location)
+                        print(f"{item.name} was picked up.")
+                if not found:
+                    print("\nItem not found.")
         elif choice.split(' ')[0] == 'DROP':
+            if type(location) is PuzzleLocation and not location.access and location.position != 4:
+                print("You don't have access to this building. You need to use a T-Card")
+            else:
+                found = False
+                drop_item = str.join(' ', choice.split(' ')[1:])
+                for item in player.inventory:
+                    if item.name.upper() == drop_item:
+                        found = True
+                        player.drop_item(item, location)
+                        print(f"{item.name} was dropped.")
+                if not found:
+                    print("\nThat item is not in your inventory.")
+        elif choice.split(' ')[0] == 'USE':
             found = False
-            drop_item = str.join(' ', choice.split(' ')[1:])
+            use_item = str.join(' ', choice.split(' ')[1:])
             for item in player.inventory:
-                if item.name.upper() == drop_item:
+                if item.name.upper() == use_item:
                     found = True
-                    player.drop_item(item, location)
-                    print(f"{item.name} was dropped.")
+                    player.use_item(item, location)
+                    print(f"{item.name} used. Access to location granted!.")
+                    print(location.full_desc)
+                    location.visited_before()
             if not found:
                 print("\nThat item is not in your inventory.")
-        elif (len(choice.split(' ')) == 2) and (choice.split(' ')[0] == 'Use'):
-            # Impliment this later
-            ...
         elif choice == 'INVENTORY':
             print("[inventory]")
             for item in player.inventory:
@@ -121,14 +143,16 @@ if __name__ == "__main__":
         elif choice == 'QUIT':
             player.victory(True)
         elif choice == 'TALK':
-            if location is PuzzleLocation and (location.position == 4 or location.position == 13):
-                location.play_puzzle()
+            if type(location) is PuzzleLocation and (location.position == 4 or location.position == 13):
+                player.score += location.play_puzzle()
+            else:
+                print('There is nobody to talk to here.')
         elif choice == 'MENU':
             print('[Menu]')
             menu_str = ''
             actions = world.available_actions(player)
             for i in range(len(actions) // 2):
-                menu_str += '- {0:30}  - {1}\n'.format(actions[2 * i], actions[2 * i + 1])
+                menu_str += '{0:30}  {1}\n'.format(actions[2 * i], actions[2 * i + 1])
             print(menu_str, end='')
         else:
             print("\nInvalid Command")

@@ -1,0 +1,32 @@
+#DO NOT REMOVE THIS LINE#
+Queens_Park 4
+10
+You are now at Queens Park.
+You are now at Queens Park, an essential stop for its stately sandstone architecture and historic sights. At every turn,
+there are museums and buildings, which together tell the story of Toronto. You see your friend Ali with a speaker,
+he approaches you and wants to have a chat. Wanna talk?
+END
+
+Robarts_Library 7
+10
+You are now at Robarts Library.
+You are now at Robarts Library. The John P. Robarts Research Library contains the largest single collection of the
+University of Toronto Libraries. Many departments and libraries are physically housed within the 14-storey complex.
+You definetly studied here last night. It could be useful looking for any of the things you have misplaced.
+END
+
+Earth_Sciences_Building 11
+10
+You are now at the Earth Sciences Building.
+You are now at the Earth Sciences Building. Housing research programs in botany, forestry, geography, geology and
+environmental studies. The Earth Sciences Library is usually a good spot to study. You might want to look around,
+you might've lost something here.
+END
+
+Bahen_Centre 13
+10
+You are now at Bahen Centre.
+You are now at Bahen Centre. Containing 50 laboratories, 10 lecture theatres and 13 tutorial rooms, it's the
+quintesential spot for Computer Science students on Campus. You see your friend Chet, and he wants to talk. Would you
+like to talk?
+END

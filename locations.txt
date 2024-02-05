@@ -28,13 +28,6 @@ and the Audrey Taylor Dining Hall. You remember coming to the lounge to study he
 left something here?
 END
 
-Queens_Park 4
-10
-You are now at Queens Park, an essential stop for its stately sandstone architecture and historic sights. At every turn,
-there are museums and buildings, which together tell the story of Toronto. You went on a walk here yesterday to take
-a break from studying.
-END
-
 Clara_Benson_Building 5
 5
 You are now at the Clara Benson Bulidng.
@@ -51,14 +44,6 @@ laboratories are bright, open, and airy, with flexible benching and support area
 often to go somewhere else though.
 END
 
-Robarts_Libaray 7
-10
-You are now at Robarts Library.
-You are now at Robarts Library. The John P. Robarts Research Library contains the largest single collection of the
-University of Toronto Libraries. Many departments and libraries are physically housed within the 14-storey complex.
-You definetly studied here last night. It could be useful looking for any of the things you have misplaced.
-END
-
 Rotman_Commerce_Building 8
 10
 You are now at the Rotman Commerce Building.
@@ -73,7 +58,7 @@ You are now at Victoria College.
 You are now at Victoria College. One of the two colleges on the east side of campus. Victoria College is home to
 many lounges, residencies, lecture halls, including Northrop Frye Hall! You don't come to this side of campus often,
 but it sure is nice to hang out here when you get the chance.
-EMD
+END
 
 St._Mike's_College 10
 5
@@ -83,29 +68,12 @@ elegant quad and famous rock gardens green campus. It is home to St. Basil’s C
 oldest buildings at the University of Toronto.
 END
 
-Earth_Sciences_Building 11
-10
-You are now at the Earth Sciences Building.
-You are now at the Earth Sciences Building. Housing research programs in botany, forestry, geography, geology and
-environmental studies. The Earth Sciences Library is usually a good spot to study. You might want to look around,
-you might've lost something here.
-END
-
 Mclennan_Physical_Laboratories 12
 5
 You are now at Mclennan Physical Laboratories.
 You are now at Mclennan Physical Laboratories. The space which invites the university in to meet the physics community
 Multiple separate waiting and study spaces that line the corridors outside the teaching labs. Always a fun place
 to visit.
-END
-
-Bahen_Centre 13
-10
-You are now at Bahen Centre.
-You are now at Bahen Centre. Containing 50 laboratories (including the Dynamic Graphics Project), 10 lecture theatres
-13 tutorial rooms, 9 seminar rooms, and about 300 offices. It is home to the Emerging Communications Technology
-Institute the Bell University Laboratories and an Advanced Surface Coatings Laboratory. The quintesential spot
-for Computer Science students on Campus.
 END
 
 Walberg_Memorial_Building 14
