@@ -1,5 +1,5 @@
 T_-Card 3 17 20
-Pen 7 17 20
+Lucky_Exam_Pen 7 17 20
 Cheat_Sheet 16 17 20
 Rotman_Backpack 11 8 10
 Bahen_Fob 4 11 10

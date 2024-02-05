@@ -22,6 +22,7 @@ from typing import Optional, TextIO
 import random
 import time
 
+
 class Location:
     """A location in our text adventure game world.
 
@@ -82,10 +83,12 @@ class Location:
         """
         self.visited = True
 
+
 class PuzzleLocation(Location):
     """
     A Location object that contains an additonal puzzle method that can be played by the player in the game.
     """
+
     def play_puzzle(self) -> int:
         """
         Allows the player to play a puzzle depending on the specific Location the player is currently at.
@@ -414,7 +417,7 @@ class World:
         return items
 
     # NOTE: The method below is REQUIRED. Complete it exactly as specified.
-    def get_location(self, x: int, y: int) -> Optional[Location]:
+    def get_location(self, x: int, y: int) -> Optional[Location | PuzzleLocation]:
         """Return Location object associated with the coordinates (x, y) in the world map, if a valid location exists at
          that position. Otherwise, return None. (Remember, locations represented by the number -1 on the map should
          return None.)
@@ -434,10 +437,6 @@ class World:
         and the x,y position of this location on the world map.
         """
 
-        # NOTE: This is just a suggested method
-        # i.e. You may remove/modify/rename this as you like, and complete the
-        # function header (e.g. add in parameters, complete the type contract) as needed
-
         actions_list = []
 
         go_list = []
@@ -455,6 +454,11 @@ class World:
         go_str = go_str[2:]
         actions_list.append(f'Go [{go_str}]')
 
+        if (self.get_location(player.x, player.y) is PuzzleLocation
+                and (self.get_location(player.x, player.y).position == 4 or
+                     self.get_location(player.x, player.y).position == 13)):
+            actions_list.append('Talk')
+
         actions_list.extend(['Use/Drop/Pickup {item}', 'Search', 'Look', 'Score',
-                             'Inventory', 'Menu', 'Save', 'Quit', 'Load'])  # Must have even amount
+                             'Inventory', 'Menu', 'Quit'])
         return actions_list

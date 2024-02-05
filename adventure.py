@@ -19,7 +19,7 @@ This file is Copyright (c) 2024 CSC111 Teaching Team
 """
 
 # Note: You may add in other import statements here as needed
-from game_data import World, Item, Location, Player
+from game_data import PuzzleLocation, World, Item, Location, Player
 
 # Note: You may add helper functions, classes, etc. here as needed
 
@@ -28,6 +28,11 @@ if __name__ == "__main__":
     world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
     player = Player(0, 0)  # set starting location of player; you may change the x, y coordinates here as appropriate
     prev_location = None
+
+    # Create a list of required items for win codition
+    required_item = {item for item in world.items if item.name == 'T-Card' or
+                     item.name == 'Cheat Sheet' or
+                     item.name == 'Lucky Exam Pen'}
 
     while not player.game_status:
         location = world.get_location(player.x, player.y)
@@ -43,8 +48,8 @@ if __name__ == "__main__":
             print("[Menu]")
             menu_str = ''
             actions = world.available_actions(player)
-            for i in range(len(actions)//2):
-                menu_str += '- {0:30}  - {1}\n'.format(actions[2 * i], actions[2 * i + 1])
+            for i in range(len(actions) // 2):
+                menu_str += '{0:30}  1}\n'.format(actions[2 * i], actions[2 * i + 1])
             print(menu_str, end='')
 
         prev_location = location
@@ -115,7 +120,9 @@ if __name__ == "__main__":
             print(player.score)
         elif choice == 'QUIT':
             player.victory(True)
-            ...
+        elif choice == 'TALK':
+            if location is PuzzleLocation and (location.position == 4 or location.position == 13):
+                location.play_puzzle()
         elif choice == 'MENU':
             print('[Menu]')
             menu_str = ''
@@ -125,3 +132,15 @@ if __name__ == "__main__":
             print(menu_str, end='')
         else:
             print("\nInvalid Command")
+
+        # Win Condition
+        if set(world.map_location_dict[17].items) & required_item == required_item:  # Set Intersection
+            print(f'You made it! You reached the Exam Center with your T-Card, Cheat Sheet, and Lucky Exam Penn'
+                  f'and you are ready to ace your exam. Your final score was: {player.score}!')
+            player.victory(True)
+
+        # Loss Condition
+        if player.remaining_moves <= 0:
+            print(f'Oh no... Your Exam started and you did not make it to the Exam Center with your T-Card, '
+                  f'Cheat Sheet, and Lucky Exam Penn. You Lost :(')
+            player.victory(True)
